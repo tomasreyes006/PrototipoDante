@@ -26,6 +26,12 @@ public class NewCharacterController : MonoBehaviour
     public bool IsGrounded { get; private set; }
     public float CurrentYaw => yaw;
 
+    [Header("Interacción / Agarrar Objetos")]
+    public Transform holdPoint;
+    public float pickupRange = 3f;
+    public LayerMask collectibleLayer;
+    private GameObject heldObject;
+
     void Start()
     {
         characterController = GetComponent<CharacterController>();
@@ -35,7 +41,6 @@ public class NewCharacterController : MonoBehaviour
             cameraTransform = Camera.main.transform;
         }
 
-        yaw = transform.eulerAngles.y;
         currentSpeed = WalkSpeed;
 
         Cursor.lockState = CursorLockMode.Locked;
@@ -113,5 +118,19 @@ public class NewCharacterController : MonoBehaviour
             );
         }
     }
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.collider.CompareTag("Collectible"))
+        {
+            CollectObject(hit.collider.gameObject);
+        }
+    }
+
+    void CollectObject(GameObject obj)
+    {
+
+        Destroy(obj);
+    }
+
 }
 
